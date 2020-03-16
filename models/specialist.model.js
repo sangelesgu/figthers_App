@@ -40,10 +40,12 @@ const specialistSchema = new mongoose.Schema({
         type: types.String,
     }, 
 
-    
-
-
-
+    "numCollegiate":{
+        require: true,
+        type: types.Number, 
+        min: 1,
+        max: 9
+    }
 });
 
 module.exports = mongoose.model ('Specialist', specialistSchema);

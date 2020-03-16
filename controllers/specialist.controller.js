@@ -17,6 +17,7 @@ mongoose.connect(
 
 exports.createSpecialist = (req, res)=>{
 
+
     bcrypt.hash(
         req.body.password,
         14,
@@ -24,12 +25,13 @@ exports.createSpecialist = (req, res)=>{
             if(error) throw error;
 
             const specialist = {
-                _id: mongoose.Types.ObjectId(),
+                _id: req.body._id,
                 username: req.body.username,
                 password: hash,
                 email: req.body.email,
                 name: req.body.name,
-                speciality: req.body.speciality
+                speciality: req.body.speciality,
+                numCollegiate: req.body.numCollegiate
             }
 
             const newSpecialist = new specialists(specialist);
@@ -40,3 +42,60 @@ exports.createSpecialist = (req, res)=>{
         })
 };
 
+exports.listOfSpecialists = (req, res)=>{
+
+    specialists.find( (error, specialists)=>{
+        if(error) throw error; 
+        res.send(specialists)
+    })
+};
+
+exports.getOneSpecialist = (req, res)=>{
+    auth.checkToken(
+        req ,res,
+        (req,res)=>{
+            const id = req.params.id; 
+            specialists.findById(id, (error, specialist)=>{
+                if(error) throw error; 
+                res.send(specialist)
+            })
+        })
+};
+
+
+exports.editSpecialist = (req, res)=>{
+    auth.checkToken(
+        req,res,
+        (req,res)=>{
+            const specialist = {
+                _id: req.body._id,
+                username: req.body.username,
+                password: req.body.password,
+                email: req.body.email,
+                name: req.body.name,
+                speciality: req.body.speciality,
+                numCollegiate: req.body.numCollegiate
+            }
+            specialists.findByIdAndUpdate(
+                req.body._id,
+                {$set:specialist},
+                (error,result)=>{
+                    if(error) 
+                    throw error; 
+                        res.send({"Message": "Specialist update successfully"})    
+                })
+        })
+};
+
+exports.deleteSpecialist = (req, res)=>{
+
+    auth.checkToken(
+        req, res,
+        (req,res)=>{
+            const id = req.params.id;
+            specialists.findByIdAndDelete(id, (error)=>{
+                if (error) throw error; 
+                res.send({"Message": "Specialist delete successfulluy"})
+            })
+        })
+};

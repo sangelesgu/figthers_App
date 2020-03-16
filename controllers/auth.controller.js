@@ -16,30 +16,57 @@ const secrets = JSON.parse(secretsContents);
 
 
 exports.login = (req, res)=>{
+    if (req.params.type === "specialist"){
+        Specialists.findById(
+            req.body._id,
+            (error,user)=>{
+                if(error) throw error; 
+                bcrypt.compare(
+                    req.body.password,
+                    user.password,
+                    (error, coincidence)=>{
+                        if (error) throw error; 
+                        if (coincidence) {
+                            jwt.sign(
+                                {"username": user.username},
+                                secrets.jwt_clave,
+                                (error, token)=>{
+                                    if(error) throw error; 
+                                    res.cookie('green', token)
+                                    res.send({"message": "Bienvenid@!", "token": token})
+                                })
+                        } else {
+                            res.send({"error": "Password incorrect!"})
+                        }
+                    })
+            })
 
-    Specialists.findById(
-        req.body._id,
-        (error,user)=>{
-            if(error) throw error; 
-            bcrypt.compare(
-                req.body.password,
-                user.password,
-                (error, coincidence)=>{
-                    if (error) throw error; 
-                    if (coincidence) {
-                        jwt.sign(
-                            {"username": user.username},
-                            secrets.jwt_clave,
-                            (error, token)=>{
-                                if(error) throw error; 
-                                res.cookie('green', token)
-                                res.send({"message": "Bienvenid@!", "token": token})
-                            })
-                    } else {
-                        res.send({"error": "Password incorrect!"})
-                    }
-                })
-        })
+    } else {
+        req.parmas == "users";
+        Users.findById(
+            req.body._id,
+            (error,user)=>{
+                if(error) throw error; 
+                bcrypt.compare(
+                    req.body.password,
+                    user.password,
+                    (error, coincidence)=>{
+                        if (error) throw error; 
+                        if (coincidence) {
+                            jwt.sign(
+                                {"username": user.username},
+                                secrets.jwt_clave,
+                                (error, token)=>{
+                                    if(error) throw error; 
+                                    res.cookie('green', token)
+                                    res.send({"message": "Bienvenid@!", "token": token})
+                                })
+                        } else {
+                            res.send({"error": "Password incorrect!"})
+                        }
+                    })
+            })
+    }  
 }
 
 exports.checkToken = (req, res, callback)=>{
