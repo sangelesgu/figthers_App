@@ -13,11 +13,14 @@ mongoose.connect(
 )
 
 
+// Create grupup: 
 exports.createGroup = (req,res)=>{
+    const date = new Date();
     const group = {
         _id: mongoose.Types.ObjectId(),
         nameGroup: req.body.nameGroup,
-        members: req.body.members
+        members: req.body.members,
+        creationDate: date
     }
     const newGroup = new groups(group);
     newGroup.save((error)=>{
@@ -26,15 +29,14 @@ exports.createGroup = (req,res)=>{
     })
 };
 
+// Update group:
 
 exports.updateGroup = (req,res)=>{
-
     const group = {
         _id: req.body._id,
         nameGroup: req.body.nameGroup,
         members: req.body.members
     }
-
     groups.findByIdAndUpdate(
         req.body._id,
         {$set: group},
@@ -44,6 +46,9 @@ exports.updateGroup = (req,res)=>{
         })
 };
 
+
+// List of all groups:
+
 exports.listOfGroups = (req, res)=>{
     groups.find((error, groups)=>{
         if (error) throw error;
@@ -51,6 +56,7 @@ exports.listOfGroups = (req, res)=>{
     })
 };
 
+// Find one group by id: 
 exports.getOneGroup = (req, res)=>{
     const id = req.params.id; 
     groups.findById(id, (error,group)=>{
@@ -59,6 +65,7 @@ exports.getOneGroup = (req, res)=>{
     })
 };
 
+// Delete group
 exports.deleteGroup = (req, res)=>{
     const id = req.params.id;
     groups.findByIdAndDelete(id, (error)=>{

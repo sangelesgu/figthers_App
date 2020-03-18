@@ -1,3 +1,5 @@
+
+
 const mongoose = require('mongoose');
 const users = require('./users.model');
 
@@ -19,9 +21,12 @@ const groupSchema = new mongoose.Schema({
         require: true,
         type: types.ObjectId,
         ref:  users
-    }]
+    }],
 
-
-})
+    "creationDate":{
+        require: true,
+        type: types.Date
+    },
+});
 
 module.exports = mongoose.model('Groups', groupSchema)

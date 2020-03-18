@@ -14,6 +14,7 @@ const secretsContents = fs.readFileSync(rutaAbsoluta);
 const secrets = JSON.parse(secretsContents);
 
 
+// Login for users and specialist: 
 
 exports.login = (req, res)=>{
     if (req.params.type === "specialist"){

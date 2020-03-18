@@ -12,6 +12,7 @@ const helmet = require('helmet');
 
 
 
+
 // Server: 
 const server = express();
 
@@ -47,10 +48,10 @@ server.get('/group/:id', groupsController.getOneGroup);
 server.delete('/deleteGroup/:id', groupsController.deleteGroup);
 
 
+
+
 // Listen:
-server.listen(3000, ()=>{
-    console.log('Server listen at port 3000')
-});
+server.listen(3000, ()=>{console.log('Server listen at port 3000')});
 
 
 

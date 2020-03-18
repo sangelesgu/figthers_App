@@ -19,6 +19,7 @@ mongoose.connect(
 // Function for create a new user:
 exports.createUser = (req, res)=>{
 
+    const date = new Date();
     
     bcrypt.hash(
         req.body.password, 
@@ -31,6 +32,10 @@ exports.createUser = (req, res)=>{
                 "username": req.body.username,
                 "email": req.body.email,
                 "password": hash,
+                "registrationDate":date,
+                "name": req.body.name,
+                "age": req.body.age,
+                "gender": req.body.gender,
                 "cancer": req.body.cancer,
                 "cancerTypus": req.body.cancerTypus,
                 "isDocuments": req.body.isDocuments,

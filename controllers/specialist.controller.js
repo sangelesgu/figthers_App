@@ -15,9 +15,10 @@ mongoose.connect(
     { useUnifiedTopology: true, useNewUrlParser: true }
 )
 
+
+// Create specialist with hash password: 
 exports.createSpecialist = (req, res)=>{
-
-
+    const date = new Date();
     bcrypt.hash(
         req.body.password,
         14,
@@ -30,8 +31,12 @@ exports.createSpecialist = (req, res)=>{
                 password: hash,
                 email: req.body.email,
                 name: req.body.name,
+                registrationDate: date,
+                hospital: req.body.hospital,
+                gender: req.body.gender,
                 speciality: req.body.speciality,
-                numCollegiate: req.body.numCollegiate
+                numCollegiate: req.body.numCollegiate,
+                languages: req.body.languages
             }
 
             const newSpecialist = new specialists(specialist);

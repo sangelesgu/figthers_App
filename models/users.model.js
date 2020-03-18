@@ -31,14 +31,24 @@ const usersSchema = new mongoose.Schema({
         
     },
 
+    "registrationDate":{
+        require: true, 
+        type: types.Date
+    },
+
     "name":{
         require: false,
         type: types.String
     },
 
-    "edad": {
+    "age": {
         require: false,
         type: types.Number
+    },
+
+    "gender": {
+        require: true,
+        type: types.String
     },
 
     "cancer": {
