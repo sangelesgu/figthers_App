@@ -17,6 +17,11 @@ const groupSchema = new mongoose.Schema({
         type: types.String
     }, 
 
+    "avatar":{
+        require:true,
+        type: types.String
+    },
+
     "members":[{
         require: true,
         type: types.ObjectId,
@@ -29,4 +34,4 @@ const groupSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Groups', groupSchema)
+module.exports = mongoose.model('groups', groupSchema)

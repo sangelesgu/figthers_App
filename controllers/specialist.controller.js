@@ -18,7 +18,15 @@ mongoose.connect(
 
 // Create specialist with hash password: 
 exports.createSpecialist = (req, res)=>{
-    const date = new Date();
+
+    specialists.find({$or:[{username:req.body.username},
+        {email: req.body.email}]},
+        (error, result)=>{
+            if(error) throw error;
+            if (result.length !== 0){
+                res.send({"Error": "Specialist already exist"})
+            } else {
+                const date = new Date();
     bcrypt.hash(
         req.body.password,
         14,
@@ -26,11 +34,13 @@ exports.createSpecialist = (req, res)=>{
             if(error) throw error;
 
             const specialist = {
-                _id: req.body._id,
+                _id: mongoose.Types.ObjectId(),
                 username: req.body.username,
                 password: hash,
                 email: req.body.email,
                 name: req.body.name,
+                lastName: req.body.lastName,
+                avatar: req.body.avatar,
                 registrationDate: date,
                 hospital: req.body.hospital,
                 gender: req.body.gender,
@@ -45,6 +55,10 @@ exports.createSpecialist = (req, res)=>{
                 res.send({"message": "Specialist created", "_id":specialist._id})
             })
         })
+
+            }
+        })
+    
 };
 
 exports.listOfSpecialists = (req, res)=>{
@@ -56,39 +70,23 @@ exports.listOfSpecialists = (req, res)=>{
 };
 
 exports.getOneSpecialist = (req, res)=>{
-    auth.checkToken(
-        req ,res,
-        (req,res)=>{
-            const id = req.params.id; 
-            specialists.findById(id, (error, specialist)=>{
-                if(error) throw error; 
-                res.send(specialist)
-            })
-        })
+    const id = req.params.id;
+    specialists.findById( id, (error,result)=>{
+        if(error) throw error;
+        res.send(result)
+    })
 };
 
 
 exports.editSpecialist = (req, res)=>{
-    auth.checkToken(
-        req,res,
-        (req,res)=>{
-            const specialist = {
-                _id: req.body._id,
-                username: req.body.username,
-                password: req.body.password,
-                email: req.body.email,
-                name: req.body.name,
-                speciality: req.body.speciality,
-                numCollegiate: req.body.numCollegiate
-            }
-            specialists.findByIdAndUpdate(
-                req.body._id,
-                {$set:specialist},
-                (error,result)=>{
-                    if(error) 
-                    throw error; 
-                        res.send({"Message": "Specialist update successfully"})    
-                })
+    let id = req.params.id
+    const specialist = req.body
+    specialists.findByIdAndUpdate(
+        id,
+        {$set: specialist},
+        (error,result)=>{
+            if (error) throw error;
+            res.send({"Message": "Specialist update succesfully", result})
         })
 };
 

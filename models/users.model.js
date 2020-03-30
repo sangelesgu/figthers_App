@@ -1,6 +1,7 @@
 
 const mongoose = require('mongoose');
-
+const articles = require('./article.model');
+const groups = require('./groups.model');
 const types = mongoose.Schema.Types;
 
 // New user schema: 
@@ -10,6 +11,11 @@ const usersSchema = new mongoose.Schema({
         require: true,
         type: types.ObjectId
     }, 
+
+    "avatar":{
+        require: false,
+        type:types.String
+    },
 
     "username":{
         require: true, 
@@ -41,23 +47,35 @@ const usersSchema = new mongoose.Schema({
         type: types.String
     },
 
+    "lastName":{
+        require: true, 
+        type: types.String
+    },
+
     "age": {
         require: false,
         type: types.Number
     },
 
     "gender": {
-        require: true,
-        type: types.String
+        require: false,
+        type: types.String,
+        enum: ['Man', 'Woman', 'Others']
     },
 
     "cancer": {
         require: true,
-        type: Boolean,
+        type: types.Boolean,
         default: false
     },  
 
-    "cancerTypus": {
+
+    "location":{
+        require: false,
+        type: types.String
+    },
+
+    "cancerType": [{
         type: types.String,
         require: ()=>{
             if (this.cancer){
@@ -65,14 +83,15 @@ const usersSchema = new mongoose.Schema({
             } else {
                 return true
             }
-        }
-    },
+        },
+        ref: articles
+    }],
     "isDocuments": {
         require: false, 
         type: types.String
     }, 
 
-    "documents": {
+   "documents": {
         type: types.String,
         require: ()=>{
             if (this.isDocuments){
@@ -81,7 +100,12 @@ const usersSchema = new mongoose.Schema({
                 return true
            }
         }
-    }
+    }, 
+    "groups":[{
+        require: false,
+        type: types.ObjectId,
+        ref: groups
+    }] 
 });
 
 module.exports = mongoose.model('Users', usersSchema);

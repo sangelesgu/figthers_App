@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Articles = require('./cancerdb.model');
+const articles = require('./article.model');
 
 const types = mongoose.Schema.Types;
 
@@ -8,6 +8,10 @@ const specialistSchema = new mongoose.Schema({
     "_id": {
         require : true,
         type : types.ObjectId
+    },
+    "avatar":{
+        require: false,
+        type: types.String
     },
 
     "username": {
@@ -36,6 +40,12 @@ const specialistSchema = new mongoose.Schema({
         type: types.String,
     }, 
 
+    "lastName":{
+        require: true,
+        type: types.String
+    },
+
+
     "registrationDate":{
         require: true,
         type: types.Date
@@ -47,7 +57,7 @@ const specialistSchema = new mongoose.Schema({
     },
 
     "gender":{
-        require: true,
+        require: false,
         type: types.String
     },
 
@@ -59,20 +69,23 @@ const specialistSchema = new mongoose.Schema({
     "numCollegiate":{
         require: true,
         type: types.Number, 
-        min: 1,
-        max: 9
     },
 
     "articles":[{
         require: false,
         type: types.ObjectId,
-        ref: Articles
+        ref: articles
     }],
 
     "languages":{
-        require: true,
+        require: false,
         type: types.String
     },
+    
+    "location":{
+        require: true,
+        type: types.String
+    }
 
 
 });

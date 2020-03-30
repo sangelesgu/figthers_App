@@ -32,13 +32,10 @@ exports.createGroup = (req,res)=>{
 // Update group:
 
 exports.updateGroup = (req,res)=>{
-    const group = {
-        _id: req.body._id,
-        nameGroup: req.body.nameGroup,
-        members: req.body.members
-    }
+    let id = req.params.id
+    const group = req.body;
     groups.findByIdAndUpdate(
-        req.body._id,
+        req.body.id,
         {$set: group},
         (error, result)=>{
             if (error) throw error; 
@@ -50,18 +47,18 @@ exports.updateGroup = (req,res)=>{
 // List of all groups:
 
 exports.listOfGroups = (req, res)=>{
-    groups.find((error, groups)=>{
+    groups.find((error, result)=>{
         if (error) throw error;
-        res.send(groups)
+        res.send(result)
     })
 };
 
 // Find one group by id: 
 exports.getOneGroup = (req, res)=>{
-    const id = req.params.id; 
-    groups.findById(id, (error,group)=>{
+    let id = req.params.id
+    groups.find(id, (error,result)=>{
         if (error) throw error;
-        res.send(group)
+        res.send(result)
     })
 };
 

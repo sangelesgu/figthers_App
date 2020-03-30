@@ -35,4 +35,4 @@ const dataBaseSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Cancer.Db', dataBaseSchema);
+module.exports = mongoose.model('articles', dataBaseSchema);
